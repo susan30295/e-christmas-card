@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy New Year 2026 🎆</title>
+    <style>
+        :root {
+            --gold: #d4af37;
+            --gold-light: #f4e5c2;
+            --dark-green: #0f2620;
+            --ribbon-red: #c41e3a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Microsoft JhengHei', serif;
+            background: radial-gradient(ellipse at top, #0a1929 0%, #020c1b 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 星空與提示 */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        #wishSuccessMessage {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            color: var(--dark-green);
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            z-index: 5000;
+            transition: 0.5s;
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.5);
+            visibility: hidden;
+        }
+
+        #wishSuccessMessage.active {
+            transform: translateX(-50%) translateY(0);
+            visibility: visible;
+        }
+
+        /* --- 禮物盒 --- */
+        .card-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            z-index: 2;
+            perspective: 1500px;
+        }
+
+        .gift-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gift-box.opening {
+            opacity: 0;
+            transform: translate(-50%, -120%) scale(1.2);
+            pointer-events: none;
+        }
+
+        .box-body {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: var(--ribbon-red);
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .box-body::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            width: 35px;
+            height: 100%;
+            background: var(--gold);
+        }
+
+        .box-body::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            height: 35px;
+            background: var(--gold);
+        }
+
+        .box-text {
+            position: absolute;
+            bottom: -45px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--gold);
+            font-weight: bold;
+            width: 220px;
+            text-align: center;
+        }
+
+        /* --- 卡片設計修正 --- */
+        .card {
+            position: relative;
+            width: 100%;
+            height: auto;
+            /* 讓卡片隨內容收縮 */
+            max-height: 95vh;
+            background: var(--dark-green);
+            background-image: linear-gradient(30deg, var(--gold) 12%, transparent 12.5%, transparent 87%, var(--gold) 87.5%, var(--gold)),
+                linear-gradient(150deg, var(--gold) 12%, transparent 12.5%, transparent 87%, var(--gold) 87.5%, var(--gold));
+            background-size: 40px 70px;
+            border-radius: 25px;
+            transform: scale(0);
+            opacity: 0;
+            transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+            /* 邊框花紋強化 */
+            border: 4px solid var(--gold);
+            outline: 2px solid var(--gold);
+            outline-offset: -10px;
+            box-shadow: inset 0 0 30px rgba(212, 175, 55, 0.3), 0 20px 60px rgba(0, 0, 0, 0.9);
+
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .card.show {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .card-content {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 5;
+            background: rgba(15, 38, 32, 0.9);
+            overflow-y: auto;
+        }
+
+        .card-title {
+            font-size: 1.8em;
+            background: linear-gradient(to bottom, var(--gold-light), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.3));
+        }
+
+        .photo-container {
+            width: 100%;
+            height: 260px;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid var(--gold);
+            background: #000;
+        }
+
+        .photo-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.5s;
+            opacity: 0;
+        }
+
+        .photo-img.active {
+            opacity: 1;
+        }
+
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: rgba(15, 38, 32, 0.7);
+            border: 1.5px solid var(--gold);
+            color: var(--gold);
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .countdown {
+            width: 100%;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            border: 1px solid var(--gold);
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        /* 計時文字全金色 */
+        .countdown,
+        .countdown-value,
+        .countdown-unit {
+            color: var(--gold) !important;
+            font-weight: bold;
+        }
+
+        .countdown-value {
+            font-size: 1.1em;
+        }
+
+        .divider {
+            width: 80%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 8px 0;
+        }
+
+        #blessing {
+            font-size: 0.9em;
+            color: #fff;
+            text-align: center;
+            font-style: italic;
+            margin: 5px 0;
+        }
+
+        @media (max-width: 480px) {
+            .photo-container {
+                height: 220px;
+            }
+
+            .card-title {
+                font-size: 1.5em;
+            }
+
+            .card-content {
+                padding: 20px;
+            }
+        }
+
+        /* 煙火 */
+        .firework {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        @keyframes fireworkExplode {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0);
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="stars" id="stars"></div>
+    <div id="wishSuccessMessage">✨ 願望已收到，2026 一定實現！ ✨</div>
+
+    <div class="card-wrapper">
+        <div class="gift-box" id="giftBox" onclick="openGift()">
+            <div class="box-body"></div>
+            <div class="box-text" style="text-shadow: 0 0 5px #000;">🎁 點擊開啟 2026 驚喜 🎁</div>
+        </div>
+
+        <div class="card" id="card">
+            <div class="card-content">
+                <h1 class="card-title">Happy New Year</h1>
+
+                <div class="photo-container">
+                    <button class="nav-btn" style="left:5px;" onclick="changeSlide(-1)">❮</button>
+                    <img id="mainPhoto" class="photo-img active" src="" alt="Photo">
+                    <button class="nav-btn" style="right:5px;" onclick="changeSlide(1)">❯</button>
+                </div>
+
+                <div class="countdown">
+                    <p style="font-size:0.65em; margin-bottom:2px; opacity:0.8;">Countdown to 2026</p>
+                    <div id="countdown"></div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div style="cursor:pointer; text-align: center;" onclick="showWishModal()">
+                    <div style="font-size:35px; filter: drop-shadow(0 0 8px var(--gold));">🎄</div>
+                    <p style="font-size:0.8em; color:var(--gold); font-weight:bold;">點擊許願樹寫下願望</p>
+                </div>
+
+                <div class="divider"></div>
+                <p id="blessing"></p>
+
+                <p
+                    style="margin-top: 15px; font-size:0.75em; color:var(--gold); padding-bottom: 5px; text-align: center; width: 100%;">
+                    — Wish you a Happy 2026 by Susan 💫
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="wish-modal" id="wishModal"
+        style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%) scale(0); background:var(--dark-green); border:2px solid var(--gold); padding:20px; z-index:10000; width:80%; max-width:300px; border-radius:15px; transition: 0.3s;">
+        <h3 style="color:var(--gold); text-align:center;">Make a Wish</h3>
+        <textarea id="wishInput"
+            style="width:100%; background:rgba(0,0,0,0.3); color:white; border:1px solid var(--gold); margin:10px 0; padding:10px; border-radius:10px;"
+            rows="3" placeholder="2026 年我希望..."></textarea>
+        <div style="display:flex; gap:10px;">
+            <button onclick="closeWishModal()"
+                style="flex:1; padding:8px; background:#444; border:none; color:white; border-radius:5px;">取消</button>
+            <button onclick="submitWish()"
+                style="flex:1; padding:8px; background:var(--gold); border:none; border-radius:5px; font-weight:bold; color:var(--dark-green);">發送願望</button>
+        </div>
+    </div>
+
+    <script>
+        const photos = [
+            { src: 'images/655C0575-0347-4ED8-A7FC-FE3AA624F6FE_1_105_c.jpeg', position: '50% 0%' },
+            { src: 'images/25447351-5B4C-4619-88B9-8AE3FDD9CF25_1_105_c.jpeg', position: '50% 0%' },
+            { src: 'images/A8E125DE-C139-4AE1-9E40-1CBC64D17553_1_105_c.jpeg', position: '50% 0%' },
+            { src: 'images/EC9AA879-F9C4-4651-90D3-8AC705A7D7C0_1_102_o.jpeg', position: '50% 50%' }
+        ];
+        let currentIndex = 0;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initStars();
+            initPhoto();
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        });
+
+        // 畫面煙火修復
+        document.addEventListener('mousedown', (e) => {
+            // 排除掉按鈕與輸入框的點擊，避免干擾功能
+            if (!e.target.closest('.nav-btn') && !e.target.closest('#wishInput') && !e.target.closest('button')) {
+                createFirework(e.clientX, e.clientY);
+            }
+        });
+
+        function initPhoto() { updatePhotoDisplay(); }
+        function updatePhotoDisplay() {
+            const img = document.getElementById('mainPhoto');
+            const data = photos[currentIndex];
+            img.style.opacity = 0;
+            setTimeout(() => {
+                img.src = data.src;
+                img.style.objectPosition = data.position;
+                img.style.opacity = 1;
+            }, 300);
+        }
+
+        function changeSlide(dir) {
+            currentIndex = (currentIndex + dir + photos.length) % photos.length;
+            updatePhotoDisplay();
+        }
+
+        function updateCountdown() {
+            const diff = new Date('2026-01-01T00:00:00') - new Date();
+            const container = document.getElementById('countdown');
+            if (diff > 0) {
+                const d = Math.floor(diff / 86400000), h = Math.floor((diff / 3600000) % 24), m = Math.floor((diff / 60000) % 60), s = Math.floor((diff / 1000) % 60);
+                container.innerHTML = `<span class="countdown-value">${d}</span><span class="countdown-unit">天</span> <span class="countdown-value">${h}</span><span class="countdown-unit">小時</span> <span class="countdown-value">${m}</span><span class="countdown-unit">分</span> <span class="countdown-value">${s}</span><span class="countdown-unit">秒</span>`;
+            } else {
+                container.innerHTML = `<span style="color:var(--gold); font-weight:bold;">🎉 2026 新年快樂! 🎉</span>`;
+            }
+        }
+
+        function openGift() {
+            const gift = document.getElementById('giftBox');
+            gift.classList.add('opening');
+            createFirework(window.innerWidth / 2, window.innerHeight / 2);
+            setTimeout(() => {
+                document.getElementById('card').classList.add('show');
+                const bls = ["願新的一年，你的每個願望都能實現 ✨", "祝你 2026 年萬事如意、心想事成 🌟", "願溫暖與好運在 2026 與你相隨 🌈"];
+                document.getElementById('blessing').textContent = bls[Math.floor(Math.random() * bls.length)];
+                setTimeout(() => gift.style.display = 'none', 1000);
+            }, 600);
+        }
+
+        function createFirework(x, y) {
+            const colors = ['#ff0', '#f0f', '#0ff', '#f00', '#0f0', '#fff', '#ffa500'];
+            for (let i = 0; i < 25; i++) {
+                const f = document.createElement('div');
+                f.className = 'firework'; f.style.left = x + 'px'; f.style.top = y + 'px';
+                f.style.background = colors[Math.floor(Math.random() * colors.length)];
+                const a = Math.random() * Math.PI * 2, v = Math.random() * 120 + 40;
+                f.style.setProperty('--tx', Math.cos(a) * v + 'px'); f.style.setProperty('--ty', Math.sin(a) * v + 'px');
+                f.style.animation = 'fireworkExplode 0.8s ease-out forwards';
+                document.body.appendChild(f); setTimeout(() => f.remove(), 800);
+            }
+        }
+
+        function showWishModal() { document.getElementById('wishModal').style.transform = 'translate(-50%, -50%) scale(1)'; }
+        function closeWishModal() { document.getElementById('wishModal').style.transform = 'translate(-50%, -50%) scale(0)'; }
+
+        function submitWish() {
+            const val = document.getElementById('wishInput').value.trim();
+            if (val) {
+                closeWishModal();
+                const msg = document.getElementById('wishSuccessMessage');
+                msg.classList.add('active');
+                let count = 0;
+                const timer = setInterval(() => {
+                    createFirework(Math.random() * window.innerWidth, Math.random() * window.innerHeight);
+                    if (++count > 12) clearInterval(timer);
+                }, 200);
+                setTimeout(() => msg.classList.remove('active'), 3500);
+                document.getElementById('wishInput').value = '';
+            }
+        }
+
+        function initStars() {
+            const container = document.getElementById('stars');
+            for (let i = 0; i < 80; i++) {
+                const s = document.createElement('div');
+                s.className = 'star';
+                s.style.width = s.style.height = Math.random() * 2 + 'px';
+                s.style.left = Math.random() * 100 + '%'; s.style.top = Math.random() * 100 + '%';
+                container.appendChild(s);
+            }
+        }
+    </script>
+</body>
+
+</html>
