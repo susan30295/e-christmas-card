@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聖誕快樂 🎄</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 25%, #2c5364 75%, #1a4d5e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
+            padding: 40px 20px;
+        }
+
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: white;
+            font-size: 1em;
+            opacity: 0.8;
+            animation: fall linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 50px 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tree {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        h1 {
+            color: #11086f;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .message {
+            color: #2c3e50;
+            font-size: 1.2em;
+            line-height: 1.8;
+            margin: 30px 0;
+        }
+
+        .decorations {
+            font-size: 30px;
+            margin: 20px 0;
+            letter-spacing: 10px;
+        }
+
+        .qr-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px dashed #c41e3a;
+        }
+
+        .qr-title {
+            color: #c41e3a;
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+
+        #qrcode {
+            display: inline-block;
+            padding: 15px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+
+        .glow {
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                text-shadow: 0 0 10px rgba(43, 6, 229, 0.5);
+            }
+            50% {
+                text-shadow: 0 0 20px rgba(21, 89, 223, 0.8);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="tree">🎄</div>
+        <h1 class="glow">聖誕快樂</h1>
+        <div class="decorations">🎁 ⛄ 🔔 ❄️</div>
+        
+        <div class="message">
+            <p>因為我交換禮物收到卡片我覺得太酷了想要來學一下所以連夜做了電子賀卡</p>
+            <p>原本也有在猶豫要寫生日卡片還是聖誕卡片</p>
+            <p>但因為我的靈感比初雪融化的速度還快加上有點忘記生日具體是哪天 想說還是想做就做好了</p>
+            <p>今年的亭雅也有很大的成長喔！好不容易扛住了五百的各種陰陽怪氣千奇百怪、肝出了論文、能上去口試、克服了莫大的緊張、順利畢業 上半年很快就沒了</p>
+            <p>下半年相對平穩許多 雖然找工作可能也讓你很緊張不安 但最終有了還不錯的結果 然後還有辦法看了兩場丁輝人還抽到海報還要在韓國郵局做美勞</p>
+            <p>
+                這段時間你真的辛苦了，但已經做得很好！向你看齊！
+            </p>
+            <p>不知道明年的你或我會在哪裡做什麼(或還有沒有再聊天 反正我寫卡片都抱持著這可能是最後一次的心態在劈哩啪啦)</p>
+            <p>祝福你之後也能繼續保持這份堅持和勇氣 然後去往你想去的任何地方</p>
+            <p>(跟你去濟州島畢業旅行很開心喔！旅途也很棒旅伴也很棒)</p>
+        </div>
+
+        <!-- <div class="qr-section">
+            <div class="qr-title">📱 掃描 QR Code 分享給朋友</div>
+            <div id="qrcode"></div>
+        </div> -->
+
+        <div class="footer">
+            <p>🎄Merry Christmas by Susan🎄</p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        // 創建雪花效果
+        function createSnowflakes() {
+            const snowflakes = ['❄', '❅', '❆'];
+            for (let i = 0; i < 50; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                snowflake.textContent = snowflakes[Math.floor(Math.random() * snowflakes.length)];
+                snowflake.style.left = Math.random() * 100 + '%';
+                snowflake.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                snowflake.style.animationDelay = Math.random() * 5 + 's';
+                snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+                document.body.appendChild(snowflake);
+            }
+        }
+
+        // 生成 QR Code
+        function generateQRCode() {
+            const currentURL = window.location.href;
+            new QRCode(document.getElementById("qrcode"), {
+                text: currentURL,
+                width: 150,
+                height: 150,
+                colorDark: "#c41e3a",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        // 初始化
+        createSnowflakes();
+        generateQRCode();
+    </script>
+</body>
+</html>
