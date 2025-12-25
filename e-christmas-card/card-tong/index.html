@@ -453,13 +453,14 @@
 
         .photo-container {
             width: 100%;
-            padding-top: 75%;
-            /* 4:3 比例,可調整 */
+            /* 從 75% 縮小到 65%，相框變扁一點，簽名就會浮上來 */
+            padding-top: 65%;
             position: relative;
-            background: #fff;
+            background: #000;
+            /* 背景設為黑色，若照片不夠寬時會像電影底片 */
             border-radius: 6px;
             overflow: hidden;
-            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
         }
 
         .photo-img {
@@ -470,7 +471,7 @@
             height: 100%;
             object-fit: cover;
             /* 保持比例,填滿框框 */
-            object-position: center;
+            transition: opacity 0.3s ease;
         }
 
         .card-signature {
@@ -611,7 +612,12 @@
 
         /* 輪播動畫所需的 CSS */
         #mainPhoto {
-            transition: opacity 0.3s ease-in-out;
+            /* 增加 transform 讓縮放也變平滑，transition 時間建議 0.3s - 0.4s */
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                object-position 0.3s ease;
+            will-change: opacity, transform;
+            /* 告訴瀏覽器提前優化效能 */
         }
 
         /* 確保圖片容器不需要 flex 橫排了，因為只有一張圖 */
@@ -704,13 +710,20 @@
 
                     <div class="ornamental-divider"></div>
 
-                    <div class="card-signature">by Susan</div>
+                    <div class="card-signature">給最特別的你</div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // 在頁面載入完成後，偷偷加載所有照片
+        window.addEventListener('load', () => {
+            photos.forEach(photo => {
+                const img = new Image();
+                img.src = photo.src;
+            });
+        });
         // 創建閃光粒子
         function createSparkles(x, y) {
             const colors = ['#ffd700', '#fff', '#ffed4e', '#f4e5c2', '#d4af37'];
@@ -772,39 +785,40 @@
 
 
         // 相片輪播
-        let currentIndex = 0;
-        // 1. 定義照片清單
+        // 1. 定義照片清單，並手動設定每張圖最適合的對齊位置 (top, center, bottom, 甚至 20%)
         const photos = [
-            'images/S__6692871.jpg',
-            'images/S__6692872.jpg',
-            'images/S__6692873.jpg'
+            { src: 'images/S__6692871.jpg', position: '50% 50%' },
+            { src: 'images/S__6692872.jpg', position: '50% 25%' },
+            { src: 'images/S__6692873.jpg', position: '50% 20%' } // 20% 代表從頂部往下偏移一點點
         ];
-        // 2. 切換照片的 function
+
+        let currentIndex = 0;
+
         function changeSlide(direction) {
             const photoElement = document.getElementById('mainPhoto');
-
-            // 計算下一個索引
             currentIndex += direction;
 
-            // 循環邏輯
-            if (currentIndex >= photos.length) {
-                currentIndex = 0; // 回到第一張
-            } else if (currentIndex < 0) {
-                currentIndex = photos.length - 1; // 跳到最後一張
-            }
+            if (currentIndex >= photos.length) currentIndex = 0;
+            else if (currentIndex < 0) currentIndex = photos.length - 1;
 
-            // 關鍵改動：直接更換圖片的 src 屬性
-            photoElement.src = photos[currentIndex];
-
-            // 選做：加入一個簡單的淡入動畫效果
+            // 1. 先讓舊照片變透明
             photoElement.style.opacity = 0;
-            setTimeout(() => {
-                photoElement.style.opacity = 1;
-            }, 50);
 
-            // 隱藏提示
-            const hint = document.getElementById('swipeHint');
-            if (hint) hint.style.opacity = '0';
+            // 2. 等透明動畫完成後（約 300ms）再換照片
+            setTimeout(() => {
+                currentIndex += direction;
+                if (currentIndex >= photos.length) currentIndex = 0;
+                else if (currentIndex < 0) currentIndex = photos.length - 1;
+
+                // 更換路徑與位置
+                photoElement.src = photos[currentIndex].src;
+                photoElement.style.objectPosition = photos[currentIndex].position;
+
+                // 3. 重要：確保圖片加載完成後再淡入，避免白屏或閃爍
+                photoElement.onload = function () {
+                    photoElement.style.opacity = 1;
+                };
+            }, 300); // 這裡的時間要對應 CSS 的 transition 時間
         }
 
         // 自動消失提示 (3秒後)
